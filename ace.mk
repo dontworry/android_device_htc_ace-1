@@ -191,8 +191,6 @@ $(call inherit-product, device/htc/ace/media_a1026.mk)
 # htc audio settings
 $(call inherit-product, device/htc/ace/media_htcaudio.mk)
 
-$(call inherit-product-if-exists, vendor/htc/ace/ace-vendor.mk)
-
 PRODUCT_NAME := htc_ace
 PRODUCT_DEVICE := ace
 PRODUCT_MODEL := HTC Desire HD
