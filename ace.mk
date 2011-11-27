@@ -176,7 +176,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
 
 PRODUCT_COPY_FILES += \
-    device/htc/ace/modules/bcm4329.ko:system/lib/modules/bcm4329.ko
+    device/htc/ace/modules/bcm4329.ko:system/lib/modules/bcm4329.ko \
+    device/htc/ace/modules/cifs.ko:system/lib/modules/cifs.ko
 
 # stuff common to all HTC phones
 $(call inherit-product, device/htc/common/common.mk)
