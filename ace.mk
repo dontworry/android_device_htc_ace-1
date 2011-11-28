@@ -160,6 +160,10 @@ PRODUCT_COPY_FILES += \
 # Alternate NAM gps.conf to NAM package
 PRODUCT_COPY_FILES += device/common/gps/gps.conf_US:system/etc/nam/gps.conf
 
+# ace uses high-density artwork where available
+# PRODUCT_LOCALES += hdpi
+PRODUCT_LOCALES += en
+
 PRODUCT_COPY_FILES += \
     device/htc/ace/vold.fstab:system/etc/vold.fstab
 
