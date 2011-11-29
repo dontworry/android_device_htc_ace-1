@@ -20,8 +20,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 ## (1) First, the most specific values, i.e. the aspects that are specific to GSM
 
 PRODUCT_COPY_FILES += \
-    device/htc/ace/init.spade.rc:root/init.spade.rc \
-    device/htc/ace/ueventd.spade.rc:root/ueventd.spade.rc
+    device/htc/ace/kernel/init.spade.rc:root/init.spade.rc \
+    device/htc/ace/kernel/ueventd.spade.rc:root/ueventd.spade.rc
 
 ## (2) Also get non-open-source GSM-specific aspects if available
 $(call inherit-product-if-exists, vendor/htc/ace/ace-vendor.mk)
@@ -59,13 +59,6 @@ PRODUCT_PACKAGES += \
     lights.spade \
     sensors.spade \
     gps.spade \
-    gralloc.msm7x30 \
-    audio_policy.msm7x30 \
-    audio.primary.msm7x30 \
-    Stk
-
-# missing packages
-PRODUCT_PACKAGES += \
     Stk
 
 # Keylayouts
