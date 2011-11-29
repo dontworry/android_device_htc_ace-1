@@ -29,7 +29,6 @@ $(call inherit-product-if-exists, vendor/google/google-vendor.mk)
 
 ## (3)  Finally, the least specific parts, i.e. the non-GSM-specific aspects
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sf.lcd.density=192 \
     ro.com.google.clientidbase=android-htc \
     ro.com.google.locationfeatures=1 \
     ro.com.google.networklocation=1 \
