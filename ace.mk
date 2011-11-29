@@ -29,6 +29,7 @@ $(call inherit-product-if-exists, vendor/google/google-vendor.mk)
 
 ## (3)  Finally, the least specific parts, i.e. the non-GSM-specific aspects
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sf.lcd.density=192 \
     ro.com.google.clientidbase=android-htc \
     ro.com.google.locationfeatures=1 \
     ro.com.google.networklocation=1 \
@@ -69,6 +70,8 @@ PRODUCT_PACKAGES += \
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
+    device/htc/ace/idc/synaptics-rmi-touchscreen.idc:/system/usr/idc/synaptics-rmi-touchscreen.idc \
+    device/htc/ace/idc/synaptics-rmi-touchscreen.idc:/system/usr/idc/atmel-touchscreen.idc \
     device/htc/ace/keychars/qwerty2.kcm.bin:system/usr/keychars/qwerty2.kcm.bin \
     device/htc/ace/keychars/qwerty.kcm.bin:system/usr/keychars/qwerty.kcm.bin \
     device/htc/ace/keychars/spade-keypad.kcm.bin:system/usr/keychars/spade-keypad.kcm.bin \
@@ -187,7 +190,8 @@ $(call inherit-product, build/target/product/full_base.mk)
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 # use high-density artwork where available
-PRODUCT_LOCALES += hdpi
+# PRODUCT_LOCALES += hdpi
+PRODUCT_LOCALES += en
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
@@ -205,44 +209,10 @@ PRODUCT_COPY_FILES += \
 # htc audio settings
 $(call inherit-product, device/htc/ace/media_htcaudio.mk)
 
-#$(call inherit-product-if-exists, vendor/htc/ace/ace-vendor.mk)
+# stuff common to all HTC phones
+$(call inherit-product, device/htc/common/common.mk)
 
-
-# prop
-
-PRODUCT_COPY_FILES += \
-    device/htc/ace/proprietary/libcamera.so:obj/lib/libcamera.so \
-    device/htc/ace/proprietary/libaudioalsa.so:obj/lib/libaudioalsa.so
-
-# All the blobs necessary for ace
-PRODUCT_COPY_FILES += \
-    device/htc/ace/proprietary/akmd:/system/bin/akmd \
-    device/htc/ace/proprietary/awb_camera:/system/bin/awb_camera \
-    device/htc/ace/proprietary/bma150_usr:/system/bin/bma150_usr \
-    device/htc/ace/proprietary/htc_ebdlogd:/system/bin/htc_ebdlogd \
-    device/htc/ace/proprietary/logcat2:/system/bin/logcat2 \
-    device/htc/ace/proprietary/lsc_camera:/system/bin/lsc_camera \
-    device/htc/ace/proprietary/rmt_storage:/system/bin/rmt_storage \
-    device/htc/ace/proprietary/snd3254:/system/bin/snd3254 \
-    device/htc/ace/proprietary/AudioBTID.csv:/system/etc/AudioBTID.csv \
-    device/htc/ace/proprietary/libEGL_adreno200.so:/system/lib/egl/libEGL_adreno200.so \
-    device/htc/ace/proprietary/libGLESv1_CM_adreno200.so:/system/lib/egl/libGLESv1_CM_adreno200.so \
-    device/htc/ace/proprietary/libGLESv2_adreno200.so:/system/lib/egl/libGLESv2_adreno200.so \
-    device/htc/ace/proprietary/libq3dtools_adreno200.so:/system/lib/egl/libq3dtools_adreno200.so \
-    device/htc/ace/proprietary/libaudioalsa.so:/system/lib/libaudioalsa.so \
-    device/htc/ace/proprietary/libcamera.so:/system/lib/libcamera.so \
-    device/htc/ace/proprietary/libgemini.so:/system/lib/libgemini.so \
-    device/htc/ace/proprietary/libgsl.so:/system/lib/libgsl.so \
-    device/htc/ace/proprietary/libhtc_acoustic.so:/system/lib/libhtc_acoustic.so \
-    device/htc/ace/proprietary/libhtc_ril.so:/system/lib/libhtc_ril.so \
-    device/htc/ace/proprietary/libmmipl.so:/system/lib/libmmipl.so \
-    device/htc/ace/proprietary/libmmjpeg.so:/system/lib/libmmjpeg.so \
-    device/htc/ace/proprietary/liboemcamera.so:/system/lib/liboemcamera.so
-
-# idc
-PRODUCT_COPY_FILES += \
-    device/htc/ace/idc/synaptics-rmi-touchscreen.idc:/system/usr/idc/synaptics-rmi-touchscreen.idc \
-    device/htc/ace/idc/synaptics-rmi-touchscreen.idc:/system/usr/idc/atmel-touchscreen.idc
+$(call inherit-product, build/target/product/full_base.mk)
 
 PRODUCT_NAME := htc_ace
 PRODUCT_DEVICE := ace
