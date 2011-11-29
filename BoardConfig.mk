@@ -23,10 +23,10 @@
 # WARNING: This line must come *before* including the proprietary
 # variant, so that it gets overwritten by the parent (which goes
 # against the traditional rules of inheritance).
-USE_CAMERA_STUB := true
+# USE_CAMERA_STUB := true
 
 # inherit from common msm7x30
--include device/htc/msm7x30-common/BoardConfigCommon.mk
+-include device/htc/ace/BoardConfigCommon.mk
 
 # inherit from the proprietary version
 -include vendor/htc/ace/BoardConfigVendor.mk
@@ -60,8 +60,8 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 1232072704
 BOARD_BOOTIMAGE_PARTITION_SIZE := 4194304
 BOARD_FLASH_BLOCK_SIZE := 262144
 
-TARGET_RELEASETOOLS_EXTENSIONS := device/htc/common
-TARGET_PREBUILT_KERNEL := device/htc/msm7x30-common/msm7230/kernel
+#TARGET_RELEASETOOLS_EXTENSIONS := device/htc/common
+#TARGET_PREBUILT_KERNEL := device/htc/msm7x30-common/msm7230/kernel
 
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_SDCARD_DEVICE_PRIMARY := /dev/block/mmcblk1p1

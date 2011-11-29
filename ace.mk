@@ -17,9 +17,6 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 # The gps config appropriate for this device
-PRODUCT_COPY_FILES += \
-    device/htc/ace/gps.conf:system/etc/gps.conf
-
 ## (1) First, the most specific values, i.e. the aspects that are specific to GSM
 
 PRODUCT_COPY_FILES += \
@@ -44,6 +41,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vold.umsdirtyratio=20
 
+# Disable visual strict mode, even on eng builds
+PRODUCT_DEFAULT_PROPERTY += \
+persist.sys.strictmode.visual=0
+
 DEVICE_PACKAGE_OVERLAYS += device/htc/ace/overlay
 
 PRODUCT_COPY_FILES += \
@@ -56,12 +57,18 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     lights.spade \
     sensors.spade \
-    gps.spade
+    gps.spade \
+    gralloc.msm7x30 \
+    audio_policy.msm7x30 \
+    audio.primary.msm7x30 \
+    Stk
+
+# missing packages
+PRODUCT_PACKAGES += \
+    Stk
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
-    device/htc/ace/idc/synaptics-rmi-touchscreen.idc:system/usr/idc/synaptics-rmi-touchscreen.idc \
-    device/htc/ace/idc/atmel-touchscreen.idc:system/usr/idc/atmel-touchscreen.idc \
     device/htc/ace/keychars/qwerty2.kcm.bin:system/usr/keychars/qwerty2.kcm.bin \
     device/htc/ace/keychars/qwerty.kcm.bin:system/usr/keychars/qwerty.kcm.bin \
     device/htc/ace/keychars/spade-keypad.kcm.bin:system/usr/keychars/spade-keypad.kcm.bin \
@@ -157,45 +164,85 @@ PRODUCT_COPY_FILES += \
     device/htc/ace/nam/Sound_Classical_MCLK.txt:system/etc/nam/Sound_Classical_MCLK.txt \
     device/htc/ace/nam/Sound_Country_MCLK.txt:system/etc/nam/Sound_Country_MCLK.txt
 
-# Alternate NAM gps.conf to NAM package
-PRODUCT_COPY_FILES += device/common/gps/gps.conf_US:system/etc/nam/gps.conf
-
-# ace uses high-density artwork where available
-# PRODUCT_LOCALES += hdpi
-PRODUCT_LOCALES += en
-
 PRODUCT_COPY_FILES += \
     device/htc/ace/vold.fstab:system/etc/vold.fstab
 
-# Kernel modules
-#PRODUCT_COPY_FILES += \
+PRODUCT_COPY_FILES += \
+    device/htc/ace/wifi/bcm4329.ko:system/lib/modules/bcm4329.ko
 
-ifeq ($(TARGET_PREBUILT_KERNEL),)
-	LOCAL_KERNEL := device/htc/ace/kernel
-else
-	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
-endif
+LOCAL_KERNEL := device/htc/ace/kernel/kernel
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
 
-PRODUCT_COPY_FILES += \
-    device/htc/ace/modules/bcm4329.ko:system/lib/modules/bcm4329.ko \
-    device/htc/ace/modules/cifs.ko:system/lib/modules/cifs.ko
-
 # stuff common to all HTC phones
-$(call inherit-product, device/htc/common/common.mk)
+#$(call inherit-product, device/htc/common/common.mk)
 
 $(call inherit-product, build/target/product/full_base.mk)
 
 # common msm7x30 configs
-$(call inherit-product, device/htc/msm7x30-common/msm7x30.mk)
+#$(call inherit-product, device/htc/msm7x30-common/msm7x30.mk)
+
+# we have enough storage space to hold precise GC data
+PRODUCT_TAGS += dalvik.gc.type-precise
+
+# use high-density artwork where available
+PRODUCT_LOCALES += hdpi
+
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+
+PRODUCT_COPY_FILES += \
+    frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.xml \
+    frameworks/base/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
 
 # media profiles and capabilities spec
-$(call inherit-product, device/htc/ace/media_a1026.mk)
+#$(call inherit-product, device/htc/ace/media_a1026.mk)
 
 # htc audio settings
 $(call inherit-product, device/htc/ace/media_htcaudio.mk)
+
+#$(call inherit-product-if-exists, vendor/htc/ace/ace-vendor.mk)
+
+
+# prop
+
+PRODUCT_COPY_FILES += \
+    device/htc/ace/proprietary/libcamera.so:obj/lib/libcamera.so \
+    device/htc/ace/proprietary/libaudioalsa.so:obj/lib/libaudioalsa.so
+
+# All the blobs necessary for ace
+PRODUCT_COPY_FILES += \
+    device/htc/ace/proprietary/akmd:/system/bin/akmd \
+    device/htc/ace/proprietary/awb_camera:/system/bin/awb_camera \
+    device/htc/ace/proprietary/bma150_usr:/system/bin/bma150_usr \
+    device/htc/ace/proprietary/htc_ebdlogd:/system/bin/htc_ebdlogd \
+    device/htc/ace/proprietary/logcat2:/system/bin/logcat2 \
+    device/htc/ace/proprietary/lsc_camera:/system/bin/lsc_camera \
+    device/htc/ace/proprietary/rmt_storage:/system/bin/rmt_storage \
+    device/htc/ace/proprietary/snd3254:/system/bin/snd3254 \
+    device/htc/ace/proprietary/AudioBTID.csv:/system/etc/AudioBTID.csv \
+    device/htc/ace/proprietary/libEGL_adreno200.so:/system/lib/egl/libEGL_adreno200.so \
+    device/htc/ace/proprietary/libGLESv1_CM_adreno200.so:/system/lib/egl/libGLESv1_CM_adreno200.so \
+    device/htc/ace/proprietary/libGLESv2_adreno200.so:/system/lib/egl/libGLESv2_adreno200.so \
+    device/htc/ace/proprietary/libq3dtools_adreno200.so:/system/lib/egl/libq3dtools_adreno200.so \
+    device/htc/ace/proprietary/libaudioalsa.so:/system/lib/libaudioalsa.so \
+    device/htc/ace/proprietary/libcamera.so:/system/lib/libcamera.so \
+    device/htc/ace/proprietary/libgemini.so:/system/lib/libgemini.so \
+    device/htc/ace/proprietary/libgsl.so:/system/lib/libgsl.so \
+    device/htc/ace/proprietary/libhtc_acoustic.so:/system/lib/libhtc_acoustic.so \
+    device/htc/ace/proprietary/libhtc_ril.so:/system/lib/libhtc_ril.so \
+    device/htc/ace/proprietary/libmmipl.so:/system/lib/libmmipl.so \
+    device/htc/ace/proprietary/libmmjpeg.so:/system/lib/libmmjpeg.so \
+    device/htc/ace/proprietary/liboemcamera.so:/system/lib/liboemcamera.so
+
+# idc
+PRODUCT_COPY_FILES += \
+    device/htc/ace/idc/synaptics-rmi-touchscreen.idc:/system/usr/idc/synaptics-rmi-touchscreen.idc \
+    device/htc/ace/idc/synaptics-rmi-touchscreen.idc:/system/usr/idc/atmel-touchscreen.idc
 
 PRODUCT_NAME := htc_ace
 PRODUCT_DEVICE := ace
